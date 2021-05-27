@@ -49,18 +49,24 @@ public class MainActivity extends AppCompatActivity {
             public void onRecyclerItemClick(int position, View view) {
                 Log.e(TAG, "onRecyclerItemClick: " + position);
                 Task task = tasks.get(position);
-                if (task.isDone()) {
-                    View popup_view = getLayoutInflater().inflate(R.layout.popup_view, null);
-                    PopupWindow pw = new PopupWindow(popup_view,
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            true);
-                    pw.showAsDropDown(view);
-                } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setIcon(R.mipmap.ic_launcher)
-                            .setTitle(task.getType())
-                            .setMessage(task.getTask())
+                AlertDialog.Builder ad_builder = new AlertDialog.Builder(MainActivity.this);
+                ad_builder.setIcon(R.mipmap.ic_launcher)
+                        .setTitle(task.getType())
+                        .setMessage(task.getTask())
+                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.e(TAG, "onClick: cancel");
+                            }
+                        })
+                        .setNeutralButton("delete", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.e(TAG, "onClick: delete");
+                            }
+                        });
+                if (!task.isDone()) {
+                    ad_builder.setIcon(R.mipmap.ic_launcher)
                             .setPositiveButton("done", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -77,21 +83,9 @@ public class MainActivity extends AppCompatActivity {
                                         w_db.close();
                                     }
                                 }
-                            })
-                            .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Log.e(TAG, "onClick: cancel");
-                                }
-                            })
-                            .setNeutralButton("delete", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Log.e(TAG, "onClick: delete");
-                                }
-                            })
-                            .create().show();
+                            });
                 }
+                ad_builder.create().show();
             }
         });
 
@@ -135,17 +129,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void setting_click(View view) {
 
-        SQLiteOpenHelper sql_helper = TaskSqlHelper.getTaskSqlHelper(this);
-        SQLiteDatabase w_db = sql_helper.getWritableDatabase();
-
-        if (w_db.isOpen()) {
-            Log.e(TAG, "fresh_tasks: Writing DB.");
-            Timestamp ts = new Timestamp(new Date().getTime());
-            String sql = "INSERT INTO tasks(task, deadline, makespan) " +
-                    "VALUES (?, ?, ?);";
-            w_db.execSQL(sql, new Object[]{"TASK", ts.toString(), "null"});
-            w_db.close();
-        }
+//        SQLiteOpenHelper sql_helper = TaskSqlHelper.getTaskSqlHelper(this);
+//        SQLiteDatabase w_db = sql_helper.getWritableDatabase();
+//
+//        if (w_db.isOpen()) {
+//            Log.e(TAG, "fresh_tasks: Writing DB.");
+//            Timestamp ts = new Timestamp(new Date().getTime());
+//            String sql = "INSERT INTO tasks(task, deadline, makespan) " +
+//                    "VALUES (?, ?, ?);";
+//            w_db.execSQL(sql, new Object[]{"TASK", ts.toString(), "null"});
+//            w_db.close();
+//        }
 
 
 //        View popup_view = getLayoutInflater().inflate(R.layout.popup_view, null);
