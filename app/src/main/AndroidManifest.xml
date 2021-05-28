@@ -9,7 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.JustDoIt">
-        <activity android:name=".activity.MainActivity">
+        <activity
+            android:name=".activity.settings.SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
+        <activity android:name=".activity.todo.TodoActivity" />
+        <activity android:name=".activity.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

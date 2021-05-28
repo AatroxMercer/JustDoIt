@@ -11,9 +11,15 @@
     <color name="Todo">#D81B60</color>
     <color name="background">#3a424c</color>
     <color name="Done">#008577</color>
+    <color name="colorAccent">#008577</color>
+
 
     <color name="black_overlay">#66000000</color>
     <color name="colorPrimary">@color/purple_500</color>
     <color name="colorPrimaryVariant">@color/purple_700</color>
     <color name="colorOnPrimary">@color/black</color>
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="light_blue_900">#FF01579B</color>
+    <color name="light_blue_A200">#FF40C4FF</color>
+    <color name="light_blue_A400">#FF00B0FF</color>
 </resources>

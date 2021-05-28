@@ -1,6 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.todo.TodoActivity">
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:contentDescription="task"
+        android:src="@drawable/ic_baseline_work_24"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/task_in"
+        app:layout_constraintStart_toStartOf="@+id/task_in" />
+
+    <EditText
+        android:id="@+id/task_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autofillHints="task"
+        android:background="@android:drawable/editbox_background"
+        android:ems="10"
+        android:hint="task content"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/pick_ddl_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <Button
+        android:id="@+id/pick_ddl_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_baseline_access_time_24"
+        android:ems="10"
+        android:onClick="pick_deadline"
+        android:text="Pick Deadline"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <Switch
+        android:id="@+id/switch_alarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_baseline_alarm_add_24"
+        android:text="Notify When Deadline is Off? "
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pick_ddl_btn" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_confirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="@dimen/fab_margin"
+        android:contentDescription="@string/fab"
+        android:src="@drawable/ic_baseline_archive_24"
+        app:backgroundTint="#31bfcf"
+        app:elevation="8dp"
+        app:fabSize="normal"
+        app:hideMotionSpec="@android:anim/fade_in"
+        app:layout_constraintBottom_toTopOf="@+id/switch_alarm"
+        app:layout_constraintStart_toEndOf="@+id/switch_alarm"
+        app:pressedTranslationZ="16dp"
+        app:rippleColor="#e7d16b" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
