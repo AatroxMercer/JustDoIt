@@ -39,15 +39,21 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     @Override
     public void onBindViewHolder(@NonNull TaskAdapter.TaskViewHolder holder, int position) {
 
+        // Todo: Deadline could be null.
+
         Task task = tasks.get(position);
         holder.task.setText(task.getTask());
         Log.e(TAG, "onBindViewHolder: " + position);
-        holder.deadline.setText(task.getS_deadline());
-        holder.makespan.setText(task.getS_makespan());
 
+        holder.deadline.setText(task.isDeadlineSet() ? task.getS_deadline() : "Free to go.");
+        holder.makespan.setText(task.isDone() ? task.getS_makespan() : "Todo yet.");
 
-        if (!task.isDone()) {
-            holder.itemView.setBackgroundColor(R.color.Todo);
+        if (task.isDone()) {
+            holder.itemView.setBackgroundResource(R.color.Done);
+        }
+
+        if (!task.isDeadlineSet()) {
+            holder.itemView.setBackgroundColor(R.color.Free);
         }
     }
 

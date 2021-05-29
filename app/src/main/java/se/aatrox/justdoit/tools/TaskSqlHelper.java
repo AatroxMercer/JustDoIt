@@ -29,8 +29,8 @@ public class TaskSqlHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String sql = "CREATE TABLE tasks(" +
             "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            "task VARCHAR(64)," +
-            "deadline TIMESTAMP NOT NULL, " +
+            "task VARCHAR(64) NOT NULL," +
+            "deadline TIMESTAMP, " +
             "makespan TIMESTAMP" +
         ");";
 

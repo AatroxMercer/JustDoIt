@@ -12,6 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="5dp"
         android:contentDescription="task"
         android:src="@drawable/ic_baseline_work_24"
         android:textAlignment="center"
@@ -21,13 +23,20 @@
 
     <EditText
         android:id="@+id/task_in"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
         android:autofillHints="task"
         android:background="@android:drawable/editbox_background"
         android:ems="10"
+        android:gravity="top|left"
         android:hint="task content"
-        android:inputType="textPersonName"
+        android:inputType="textMultiLine"
+        android:lines="8"
+        android:maxLines="10"
+        android:minLines="6"
+        android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@+id/pick_ddl_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,27 +47,14 @@
         android:id="@+id/pick_ddl_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
         android:drawableLeft="@drawable/ic_baseline_access_time_24"
         android:ems="10"
         android:onClick="pick_deadline"
-        android:text="Pick Deadline"
+        android:text="Pick a Deadline ? "
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <Switch
-        android:id="@+id/switch_alarm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_baseline_alarm_add_24"
-        android:text="Notify When Deadline is Off? "
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pick_ddl_btn" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -73,8 +69,8 @@
         app:elevation="8dp"
         app:fabSize="normal"
         app:hideMotionSpec="@android:anim/fade_in"
-        app:layout_constraintBottom_toTopOf="@+id/switch_alarm"
-        app:layout_constraintStart_toEndOf="@+id/switch_alarm"
+        app:layout_constraintStart_toEndOf="@+id/pick_ddl_btn"
+        app:layout_constraintTop_toBottomOf="@+id/task_in"
         app:pressedTranslationZ="16dp"
         app:rippleColor="#e7d16b" />
 

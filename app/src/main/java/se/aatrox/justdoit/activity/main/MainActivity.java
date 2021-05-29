@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                         });
-                if (!task.isDone()) {
+                if (!task.isDone() && task.isDeadlineSet()) {
                     ad_builder.setIcon(R.mipmap.ic_launcher)
                             .setPositiveButton("done", new DialogInterface.OnClickListener() {
                                 @Override
@@ -136,22 +136,23 @@ public class MainActivity extends AppCompatActivity {
     public void fresh_tasks() {
 
         boolean isDoneShowed = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("isDoneShowed", true);
-
-        SQLiteOpenHelper sql_helper = TaskSqlHelper.getTaskSqlHelper(this);
-        SQLiteDatabase r_db = sql_helper.getReadableDatabase();
+        SQLiteDatabase r_db = TaskSqlHelper.getTaskSqlHelper(this).getReadableDatabase();
 
         if (r_db.isOpen()) {
             Log.e(TAG, "fresh_tasks: Reading DB.");
             Cursor cursor = r_db.rawQuery("SELECT * FROM tasks ORDER BY _id DESC;", null);
-            int i = 0;
+
             while (cursor.moveToNext()) {
+                Log.e(TAG, "fresh_tasks: " +
+                        cursor.getString(cursor.getColumnIndex("task"))+
+                        cursor.getString(cursor.getColumnIndex("deadline"))+
+                        cursor.getString(cursor.getColumnIndex("makespan")));
                 Task task = new Task(
                         cursor.getInt(cursor.getColumnIndex("_id")),
                         cursor.getString(cursor.getColumnIndex("task")),
                         cursor.getString(cursor.getColumnIndex("deadline")),
                         cursor.getString(cursor.getColumnIndex("makespan"))
                 );
-                Log.e(TAG, "fresh_tasks: " + (i++) + ":" + (task.isDone() ? "todo" : "done"));
                 if (isDoneShowed || !task.isDone()) {
                     tasks.add(task);
                 }

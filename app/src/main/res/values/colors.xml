@@ -10,8 +10,9 @@
 
     <color name="Todo">#D81B60</color>
     <color name="background">#3a424c</color>
-    <color name="Done">#008577</color>
-    <color name="colorAccent">#008577</color>
+    <color name="Done">#FF008577</color>
+    <color name="Free">@color/purple_500</color>
+    <color name="colorAccent">#00008577</color>
 
 
     <color name="black_overlay">#66000000</color>

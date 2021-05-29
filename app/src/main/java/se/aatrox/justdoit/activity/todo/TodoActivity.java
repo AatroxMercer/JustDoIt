@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.annotation.Nullable;
@@ -33,8 +34,14 @@ import se.aatrox.justdoit.tools.TaskSqlHelper;
 public class TodoActivity extends AppCompatActivity {
 
     private static final String TAG = "Aatrox";
-    private Button btn_ddl;
     private int ddl_year, ddl_month, ddl_day, ddl_hour, ddl_min;
+
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, MainActivity.class));
+        super.onBackPressed();
+    }
 
     public void pick_deadline(View view) {
         Log.e(TAG, "onClick: ddl picker.");
@@ -77,29 +84,33 @@ public class TodoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todo);
         ddl_year = -1;
-        btn_ddl = findViewById(R.id.pick_ddl_btn);
 
         FloatingActionButton fab = findViewById(R.id.fab_confirm);
         fab.show();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ddl_year == -1) {
-                    Snackbar.make(view, "Setting A Deadline", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                    pick_deadline(view);
-                }
+                // TODO : deadline could be null
                 SQLiteOpenHelper sql_helper = TaskSqlHelper.getTaskSqlHelper(TodoActivity.this);
                 SQLiteDatabase w_db = sql_helper.getWritableDatabase();
-
                 if (w_db.isOpen()) {
-                    Log.e(TAG, "onClick: Task Confirmed. Inserting.");
-                    Timestamp ts = new Timestamp(new Date(ddl_year, ddl_month, ddl_day, ddl_hour, ddl_min).getTime());
-                    String sql = "INSERT INTO tasks(task, deadline, makespan) " +
-                            "VALUES (?, ?, ?);";
-                    w_db.execSQL(sql, new Object[]{"TASK", ts.toString(), "null"});
+                    Log.e(TAG, "onClick: Task Confirmed. Inserting. IsDeadlineSet: "+ (ddl_year != -1));
+                    if (ddl_year != -1) {
+                        Timestamp ts = new Timestamp(new Date(ddl_year, ddl_month, ddl_day, ddl_hour, ddl_min).getTime());
+                        String sql = "INSERT INTO tasks(task, deadline, makespan) " +
+                                "VALUES (?, ?, NULL);";
+                        w_db.execSQL(sql, new Object[]{((TextView) findViewById(R.id.task_in)).getText(), ts.toString()});
+                    } else {
+                        String sql = "INSERT INTO tasks(task, deadline, makespan) " +
+                                "VALUES (?, NULL, NULL);";
+                        w_db.execSQL(sql, new Object[]{((TextView) findViewById(R.id.task_in)).getText()});
+                    }
                     w_db.close();
                 }
+
+                // Todo : set alarm;
+
+
 
                 startActivity(new Intent(TodoActivity.this, MainActivity.class));
                 finish();
