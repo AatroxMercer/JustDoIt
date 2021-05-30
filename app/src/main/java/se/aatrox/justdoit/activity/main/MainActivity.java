@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         fresh_tasks();
 
         RecyclerView rv = findViewById(R.id.view_R);
-        TaskAdapter ta = new TaskAdapter(tasks, this);
+        TaskAdapter ta = new TaskAdapter(tasks, this, rv);
         rv.setAdapter(ta);
         rv.setLayoutManager(new LinearLayoutManager(this));
 
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                                     Log.e(TAG, "fresh_tasks: Writing DB.");
                                     String sql = "DELETE FROM tasks WHERE  _id = ?;";
                                     w_db.execSQL(sql, new Object[]{task.get_id()});
-                                    Log.e(TAG, "delete task " + position);
+                                    Log.e(TAG, "delete task: " + task.getTask());
                                     w_db.close();
 
                                     finish();
@@ -143,10 +143,10 @@ public class MainActivity extends AppCompatActivity {
             Cursor cursor = r_db.rawQuery("SELECT * FROM tasks ORDER BY _id DESC;", null);
 
             while (cursor.moveToNext()) {
-                Log.e(TAG, "fresh_tasks: " +
-                        cursor.getString(cursor.getColumnIndex("task"))+
-                        cursor.getString(cursor.getColumnIndex("deadline"))+
-                        cursor.getString(cursor.getColumnIndex("makespan")));
+//                Log.e(TAG, "fresh_tasks: " +
+//                        cursor.getString(cursor.getColumnIndex("task"))+
+//                        cursor.getString(cursor.getColumnIndex("deadline"))+
+//                        cursor.getString(cursor.getColumnIndex("makespan")));
                 Task task = new Task(
                         cursor.getInt(cursor.getColumnIndex("_id")),
                         cursor.getString(cursor.getColumnIndex("task")),

@@ -10,6 +10,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
+
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import se.aatrox.justdoit.R;
@@ -23,9 +27,12 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     private List<Task> tasks;
     private Context context;
 
-    public TaskAdapter(List<Task> tasks, Context context) {
+    private RecyclerView rv;
+
+    public TaskAdapter(List<Task> tasks, Context context, RecyclerView rv) {
         this.tasks = tasks;
         this.context = context;
+        this.rv = rv;
     }
 
     @NonNull
@@ -45,12 +52,24 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         holder.task.setText(task.getTask());
         Log.e(TAG, "onBindViewHolder: " + position);
 
-        holder.deadline.setText(task.isDeadlineSet() ? task.getS_deadline() : "Free to go.");
-        holder.makespan.setText(task.isDone() ? task.getS_makespan() : "Todo yet.");
+        Timestamp ts = new Timestamp(new Date().getTime());
+
+        Log.e(TAG, "onBindViewHolder: " + ts.toString() );
+
+        if (task.isDeadlineSet() && ts.toString().compareTo(task.getS_deadline()) > 0) {
+
+            Snackbar.make(rv, "Out of time: \n" + task.getTask(), Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
+
+
+        holder.deadline.setText(task.getS_deadline());
+        holder.makespan.setText(task.getS_makespan());
 
         if (task.isDone()) {
             holder.itemView.setBackgroundResource(R.color.Done);
         }
+
 
         if (!task.isDeadlineSet()) {
             holder.itemView.setBackgroundColor(R.color.Free);
@@ -67,6 +86,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
         public TaskViewHolder(@NonNull View itemView) {
             super(itemView);
+
+
 
             task = itemView.findViewById(R.id.task);
             deadline = itemView.findViewById(R.id.deadline);

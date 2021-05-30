@@ -34,6 +34,7 @@ import se.aatrox.justdoit.tools.TaskSqlHelper;
 public class TodoActivity extends AppCompatActivity {
 
     private static final String TAG = "Aatrox";
+    boolean isDeadlineSet;
     private int ddl_year, ddl_month, ddl_day, ddl_hour, ddl_min;
 
 
@@ -45,6 +46,14 @@ public class TodoActivity extends AppCompatActivity {
 
     public void pick_deadline(View view) {
         Log.e(TAG, "onClick: ddl picker.");
+
+        ddl_year = Calendar.getInstance().get(Calendar.YEAR);
+        ddl_month = Calendar.getInstance().get(Calendar.MONTH);
+        ddl_day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        ddl_hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        ddl_min = Calendar.getInstance().get(Calendar.MINUTE);
+
+
         TimePickerDialog timePickerDialog = new TimePickerDialog(
                 TodoActivity.this,
                 new TimePickerDialog.OnTimeSetListener() {
@@ -52,17 +61,12 @@ public class TodoActivity extends AppCompatActivity {
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         ddl_hour = hourOfDay;
                         ddl_min = minute;
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.set(0, 0, ddl_day, ddl_hour, ddl_min);
                     }
                 }, 12, 0, false
         );
         timePickerDialog.updateTime(ddl_hour, ddl_min);
         timePickerDialog.show();
 
-        ddl_year = Calendar.getInstance().get(Calendar.YEAR);
-        ddl_month = Calendar.getInstance().get(Calendar.MONTH);
-        ddl_day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 TodoActivity.this,
                 new DatePickerDialog.OnDateSetListener() {
@@ -70,20 +74,22 @@ public class TodoActivity extends AppCompatActivity {
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         ddl_year = year;
                         ddl_month = month;
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.set(ddl_year, ddl_month, ddl_day, 0, 0);
+                        ddl_day = dayOfMonth;
                     }
                 }, ddl_year, ddl_month, ddl_day
         );
         datePickerDialog.updateDate(ddl_year, ddl_month, ddl_day);
         datePickerDialog.show();
+
+        isDeadlineSet = true;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todo);
-        ddl_year = -1;
+
+        isDeadlineSet = false;
 
         FloatingActionButton fab = findViewById(R.id.fab_confirm);
         fab.show();
@@ -94,9 +100,14 @@ public class TodoActivity extends AppCompatActivity {
                 SQLiteOpenHelper sql_helper = TaskSqlHelper.getTaskSqlHelper(TodoActivity.this);
                 SQLiteDatabase w_db = sql_helper.getWritableDatabase();
                 if (w_db.isOpen()) {
-                    Log.e(TAG, "onClick: Task Confirmed. Inserting. IsDeadlineSet: "+ (ddl_year != -1));
-                    if (ddl_year != -1) {
-                        Timestamp ts = new Timestamp(new Date(ddl_year, ddl_month, ddl_day, ddl_hour, ddl_min).getTime());
+                    Log.e(TAG, "onClick: Task Confirmed. Inserting. IsDeadlineSet: " + (ddl_year != -1));
+                    if (isDeadlineSet) {
+                        Log.e(TAG, "Select Day of Month: " + ddl_day);
+
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(ddl_year, ddl_month, ddl_day, ddl_hour, ddl_min);
+
+                        Timestamp ts = new Timestamp(calendar.getTimeInMillis());
                         String sql = "INSERT INTO tasks(task, deadline, makespan) " +
                                 "VALUES (?, ?, NULL);";
                         w_db.execSQL(sql, new Object[]{((TextView) findViewById(R.id.task_in)).getText(), ts.toString()});
@@ -109,8 +120,6 @@ public class TodoActivity extends AppCompatActivity {
                 }
 
                 // Todo : set alarm;
-
-
 
                 startActivity(new Intent(TodoActivity.this, MainActivity.class));
                 finish();

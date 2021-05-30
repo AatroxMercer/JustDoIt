@@ -3,8 +3,12 @@ package se.aatrox.justdoit.tools;
 import android.util.Log;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class Task {
+    public final static DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
     private int _id;
     private final String task;
     private final Timestamp deadline, makespan;
@@ -30,11 +34,11 @@ public class Task {
     }
 
     public String getS_deadline() {
-        return deadline.toString();
+        return isDeadlineSet() ? deadline.toString() : "Free to go.";
     }
 
     public String getS_makespan() {
-        return makespan.toString();
+        return isDone()? makespan.toString() : "Wait to do.";
     }
 
     public Task(int _id, String task, String deadline, String makespan) {
