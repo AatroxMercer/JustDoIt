@@ -33,6 +33,17 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         this.tasks = tasks;
         this.context = context;
         this.rv = rv;
+
+        int cnt = 0;
+        for (Task task :
+                tasks) {
+            if (!task.isDone() && (new Timestamp(new Date().getTime())).toString().compareTo(task.getS_deadline()) > 0) {
+                Log.e(TAG, "onBindViewHolder: " + task.getTask());
+                cnt++;
+            }
+        }
+        Snackbar.make(rv, "[WARNING]: \n\t\t" + cnt + " todos out of time.", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 
     @NonNull
@@ -46,8 +57,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     @Override
     public void onBindViewHolder(@NonNull TaskAdapter.TaskViewHolder holder, int position) {
 
-        // Todo: Deadline could be null.
-
         Task task = tasks.get(position);
         holder.task.setText(task.getTask());
         Log.e(TAG, "onBindViewHolder: " + position);
@@ -56,11 +65,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
         Log.e(TAG, "onBindViewHolder: " + ts.toString() );
 
-        if (task.isDeadlineSet() && ts.toString().compareTo(task.getS_deadline()) > 0) {
-
-            Snackbar.make(rv, "Out of time: \n" + task.getTask(), Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-        }
 
 
         holder.deadline.setText(task.getS_deadline());

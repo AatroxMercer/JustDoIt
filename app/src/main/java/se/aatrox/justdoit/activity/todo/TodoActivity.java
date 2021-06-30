@@ -96,7 +96,6 @@ public class TodoActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO : deadline could be null
                 SQLiteOpenHelper sql_helper = TaskSqlHelper.getTaskSqlHelper(TodoActivity.this);
                 SQLiteDatabase w_db = sql_helper.getWritableDatabase();
                 if (w_db.isOpen()) {
@@ -118,8 +117,6 @@ public class TodoActivity extends AppCompatActivity {
                     }
                     w_db.close();
                 }
-
-                // Todo : set alarm;
 
                 startActivity(new Intent(TodoActivity.this, MainActivity.class));
                 finish();
